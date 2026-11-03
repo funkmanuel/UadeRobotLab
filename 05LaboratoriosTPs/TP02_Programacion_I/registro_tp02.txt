@@ -1,0 +1,128 @@
+REGISTRO DE DESARROLLO - TP02 PROGRAMACION I
+Fecha: 05/10/2026. Zona horaria: America/Buenos_Aires (UTC-03).
+Integrantes y comision: pendientes de completar por el grupo.
+Modalidad de este bloque: desarrollo con asistencia de IA (Codex).
+Revision y presentacion humana del grupo: pendientes.
+
+TIEMPOS MEDIDOS
+Inicio de la medicion: 2026-10-05 19:09:16.
+Corte del registro: 2026-10-05 19:20:03.
+Actividad                     Segundos     Minutos
+analisis                            41     0.68
+programacion                       157     2.62
+pruebas                            343     5.72
+presentacion y registro            106     1.77
+Total medido: 10.78 minutos.
+
+Son tiempos de reloj del agente, medidos con marcas UTC al cambiar de etapa.
+La programacion incluye la escritura de las pruebas. Las pruebas incluyen
+preparar el entorno, instalar dependencias, verificaciones y esperas.
+Algunas consultas del registro se hicieron durante las pruebas.
+Los tiempos humanos del grupo y las conversaciones previas no se midieron.
+La redaccion del reporte final del grupo y la entrega todavia no se realizaron.
+Este registro es parcial: no cuenta trabajo posterior al corte.
+
+VERIFICACION DEL PROGRAMA
+Pruebas automaticas: 11 casos aprobados con unittest.
+Incluyen formatos incorrectos, ordenes desconocidas, datos faltantes, textos,
+booleanos como numeros, tiempos negativos, historial vacio, continuidad tras
+rechazos y desconexion incluso cuando falla la detencion final.
+Los limites los comprueba la API Robot. No se modificaron sus validadores.
+
+Misiones ejecutadas contra el simulador G1, perfil TP02, transporte local:
+Mision                  Ejecutados  Rechazados  Duracion (s)  Error posicion (m)
+MISION_BASICA                    4           0         7.734             0.00300
+MISION_CUADRADO                  9           0        21.902             0.00950
+MISION_CON_ERRORES               4           7         8.102             0.00004
+MISION_LARGA                     9           0        20.647             0.00428
+Cada orden dejo una entrada en el historial, en el mismo orden de la mision.
+Todos los recorridos quedaron dentro de 0.04 m y 0.06 rad del resultado
+esperado a partir de las ordenes ejecutadas. El robot termino quieto.
+La mision con errores registro los siete rechazos y ejecuto las ordenes finales.
+Tambien se verifico la ejecucion directa de mi_tp02.py con MISION_BASICA:
+4 comandos ejecutados, 0 rechazados, detencion y desconexion correctas.
+
+ENTORNO UTILIZADO
+Sistema: Windows.
+Python de las pruebas: 3.12.14, entorno temporal uade-tp02-venv.
+MuJoCo: 3.15.0.
+El Python 3.11 habitual fue bloqueado por Application Control durante la
+preparacion. Se utilizo el runtime disponible de Codex en un entorno temporal.
+Se creo una ruta alternativa sin tildes mediante una junction hacia el TP.
+El simulador G1 quedo abierto al finalizar las pruebas.
+
+Comandos de PowerShell desde la carpeta TP02_Programacion_I:
+Ejecutar la mision seleccionada:
+& "$env:TEMP\uade-tp02-venv\Scripts\python.exe" mi_desarrollo\mi_tp02.py
+
+Repetir las pruebas automaticas:
+& "$env:TEMP\uade-tp02-venv\Scripts\python.exe" -m unittest discover -s mi_desarrollo -p test_tp02.py -v
+
+Abrir el simulador, si esta cerrado:
+Push-Location "$env:TEMP\uade-tp02-launch\entorno"
+& "$env:TEMP\uade-tp02-venv\Scripts\python.exe" -m sim --robot g1 --materia tp02
+Pop-Location
+
+En main(), cambiar mision = MISION_BASICA por MISION_CUADRADO,
+MISION_CON_ERRORES o MISION_LARGA para elegir el recorrido.
+El entorno y la junction son locales y temporales; no viajan con el fork.
+En otra computadora se siguen las instrucciones de INSTALACION.md.
+Evidencia local de las cuatro misiones: %TEMP%\uade-tp02-resultados.json.
+
+USO DE INTELIGENCIA ARTIFICIAL
+Herramienta: Codex, aplicacion de escritorio, trabajo local.
+Modelo de esta implementacion: gpt-6.1-sol.
+Thinking effort configurado: xhigh.
+No se delego trabajo a subagentes.
+
+Fuente de las metricas: eventos token_count y turn_context del registro local
+de esta conversacion. Se leyeron solamente los contadores y la configuracion.
+Referencia inicial: 2026-10-05T22:08:39.351Z.
+Corte de tokens: 2026-10-05T22:17:19.986Z.
+El subtotal se calcula restando el acumulado inicial del acumulado al corte.
+
+Contadores                    Inicial         Al corte       Subtotal del bloque
+input_tokens                      1719383          4448015              2728632
+cached_input_tokens               1551360          4229376              2678016
+cache_write_input_tokens                0                0                    0
+output_tokens                        8632            20583                11951
+reasoning_output_tokens              3215             7686                 4471
+total_tokens                      1728015          4468598              2740583
+
+Entrada sin cache en este bloque: 50616 tokens.
+cached_input_tokens esta incluido dentro de input_tokens.
+reasoning_output_tokens esta incluido dentro de output_tokens.
+No deben sumarse esos subconjuntos otra vez al total.
+La entrada incluye el contexto reenviado en sucesivas llamadas: no equivale
+a la cantidad de palabras nuevas del codigo.
+El acumulado al corte incluye conversaciones anteriores y otros modelos.
+El subtotal corresponde al bloque de implementacion iniciado el 05/10/2026.
+La respuesta final y el trabajo posterior al corte no estan incluidos.
+
+ESTIMACION MONETARIA
+Equivalente hipotetico de API Standard para el subtotal: USD 0.488544
+(aproximadamente USD 0.49).
+Tarifas de GPT-6.1 Sol por millon de tokens consultadas el 05/10/2026:
+entrada sin cache USD 2; entrada con cache USD 0.10;
+escritura de cache USD 2.50; salida USD 10.
+Formula: (entrada_sin_cache * 2 + entrada_con_cache * 0.10
+          + escritura_cache * 2.50 + salida * 10) / 1000000.
+La mayor entrada individual registrada fue 175186 tokens,
+por debajo del umbral de 272000 para el contexto corto.
+Fuente oficial: https://developers.openai.com/api/docs/models/gpt-6.1-sol
+
+Esta estimacion asume API Standard y considera solamente los tokens.
+El monto efectivamente pagado o imputado al plan de ChatGPT no se verifico.
+No se asigno un costo a las conversaciones anteriores con otros modelos,
+a la suscripcion, ni a herramientas externas.
+La estimacion debe actualizarse si se agrega mas trabajo.
+
+PENDIENTES DEL GRUPO
+Completar nombres y comision en el archivo de entrega.
+Comprobar o crear el fork grupal; origin todavia apunta al repositorio docente.
+Preparar la entrega del enlace por correo.
+Confirmar la fecha de la primera entrega: la consigna menciona tanto
+11/10 a las 23:59 como 2/10 en el cronograma.
+Completar tiempos de trabajo humano y elaborar el reporte final para el 31/10.
+Redactar por cuenta propia las actividades funcional y tecnica: la consigna
+exige hacerlas sin IA y no se redactaron en este trabajo.

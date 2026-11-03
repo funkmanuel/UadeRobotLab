@@ -15,7 +15,34 @@
 
 from robot import ErrorDeSeguridad, Robot
 
-from misiones import MISION_BASICA, MISION_CON_ERRORES, MISION_CUADRADO
+from misiones import MISION_BASICA, MISION_CON_ERRORES, MISION_CUADRADO, MISION_LARGA
+
+
+def motivo_comando_invalido(comando):
+    """Devuelve el motivo del rechazo, o un texto vacio si el formato es valido."""
+    if type(comando) != tuple:
+        return "El comando debe ser una tupla."
+    if len(comando) == 0:
+        return "La tupla del comando esta vacia."
+
+    nombre = comando[0]
+    if nombre not in ("avanzar", "girar", "detenerse", "saludar"):
+        return f"Comando desconocido: {nombre}."
+
+    if nombre in ("detenerse", "saludar"):
+        if len(comando) != 1:
+            return f"{nombre} no lleva velocidad ni tiempo."
+    else:
+        if len(comando) != 3:
+            return f"{nombre} necesita velocidad y tiempo."
+        if type(comando[1]) not in (int, float):
+            return "La velocidad debe ser un numero entero o decimal."
+        if type(comando[2]) not in (int, float):
+            return "El tiempo debe ser un numero entero o decimal."
+        if comando[2] < 0:
+            return "El tiempo no puede ser negativo."
+
+    return ""
 
 
 # =====================================================================
@@ -39,8 +66,7 @@ def comando_es_valido(comando):
       - que velocidad y tiempo sean numeros de verdad, no textos
       - que el tiempo no sea negativo
     """
-    # TU CODIGO ACA
-    pass
+    return motivo_comando_invalido(comando) == ""
 
 
 # =====================================================================
@@ -60,8 +86,25 @@ def ejecutar_comando(robot, comando):
     igual (por ejemplo, si la velocidad supera el limite de la materia).
     Eso llega como un ErrorDeSeguridad y conviene atraparlo.
     """
-    # TU CODIGO ACA
-    pass
+    motivo = motivo_comando_invalido(comando)
+    if motivo != "":
+        return f"Rechazado: {motivo}"
+
+    nombre = comando[0]
+    try:
+        if nombre == "avanzar":
+            robot.avanzar(velocidad=comando[1], tiempo=comando[2])
+        elif nombre == "girar":
+            robot.girar(velocidad=comando[1], tiempo=comando[2])
+        elif nombre == "detenerse":
+            robot.detenerse()
+        elif nombre == "saludar":
+            robot.saludar()
+    except ErrorDeSeguridad as error:
+        robot.detenerse()
+        return f"Rechazado: {error}"
+
+    return f"Ejecutado: {nombre}."
 
 
 # =====================================================================
@@ -77,8 +120,14 @@ def ejecutar_mision(robot, mision, historial):
 
     Un comando invalido NO tiene que cortar la mision.
     """
-    # TU CODIGO ACA
-    pass
+    for comando in mision:
+        if comando_es_valido(comando):
+            resultado = ejecutar_comando(robot, comando)
+        else:
+            resultado = f"Rechazado: {motivo_comando_invalido(comando)}"
+
+        historial.append({"comando": comando, "resultado": resultado})
+        print(f"{comando} -> {resultado}")
 
 
 # =====================================================================
@@ -92,28 +141,45 @@ def generar_reporte(historial):
       - cuantos se rechazaron
       - cual fue el motivo de cada rechazo
     """
-    # TU CODIGO ACA
-    pass
+    ejecutados = 0
+    rechazados = 0
+
+    for registro in historial:
+        if registro["resultado"].startswith("Ejecutado:"):
+            ejecutados = ejecutados + 1
+        else:
+            rechazados = rechazados + 1
+
+    print("\nReporte de la mision")
+    print("Total de comandos:", len(historial))
+    print("Ejecutados:", ejecutados)
+    print("Rechazados:", rechazados)
+
+    for registro in historial:
+        if registro["resultado"].startswith("Rechazado:"):
+            print(f"{registro['comando']} -> {registro['resultado']}")
 
 
 # =====================================================================
 #  PROGRAMA PRINCIPAL
 # =====================================================================
 def main():
+    # Cambia esta variable por MISION_CUADRADO, MISION_CON_ERRORES o MISION_LARGA.
+    mision = MISION_BASICA
+
     robot = Robot()
     robot.conectar()
 
     historial = []
 
     try:
-        # Empeza probando con MISION_BASICA.
-        # Cuando funcione, proba con MISION_CON_ERRORES: esa tiene
-        # comandos invalidos a proposito.
-        ejecutar_mision(robot, MISION_BASICA, historial)
+        ejecutar_mision(robot, mision, historial)
         generar_reporte(historial)
     finally:
-        robot.detenerse()
-        robot.desconectar()
+        try:
+            robot.detenerse()
+        finally:
+            robot.desconectar()
 
 
 if __name__ == "__main__":
